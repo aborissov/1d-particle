@@ -15,7 +15,9 @@ const float Tfinal = 0.001/Tscl;
 const float dt = 1.0e-7/Tscl;
 const int nt = Tfinal/dt;
 const int nfields = 3;
-const int nparticles = 1000;
+const int nparticles = 10000;
+const int nwrite = 500;
+const int nwrite_particles = 10;
 const int output_fields = nfields;
 
 #endif

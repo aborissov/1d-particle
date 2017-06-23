@@ -21,15 +21,21 @@ with open (path, 'r') as file:
 #plt.show()
 
 #plt.hist(x,bins = 100,range = (-3e2,3e2))
-plt.hist(positions,bins = 100,histtype = 'step',color = 'k')
+plt.hist(positions/1e6,bins = 100,histtype = 'step',color = 'k')
+plt.xlabel("Displacement (Mm)")
+plt.ylabel("count")
 #plt.show()
 print len(positions)
 
 plt.figure()
-plt.hist(energies,bins = 100)
+plt.hist(energies/1e3,bins = 100,histtype = 'step', color = 'k')
+plt.xlabel("Energy (keV)")
+plt.ylabel("count")
 #plt.show()
 
 plt.figure()
-plt.hist(theta,bins = 100)
+plt.hist(theta,bins = 100,histtype = 'step', color = 'k')
+plt.xlabel("Pitch Angle")
+plt.ylabel("count")
 plt.show()
 
