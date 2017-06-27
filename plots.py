@@ -1,0 +1,10 @@
+p1.plot_tf("black")
+p2.plot_tf("red")
+p3.plot_tf("green")
+p4.plot_tf("blue")
+p11.plot_tf("grey")
+p12.plot_tf("pink")
+p13.plot_tf("olive")
+p14.plot_tf("cyan")
+plt.show()
+

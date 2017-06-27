@@ -15,7 +15,10 @@ class particles:
         		self.energies = np.fromfile(file, dtype = np.float32, count = head[0])
         		count += head[0]*self.energies[0].nbytes
         		file.seek(count)
-        		self.theta = np.fromfile(file, dtype = np.float32)	
+        		self.theta = np.fromfile(file, dtype = np.float32, count = head[0])	
+        		count += head[0]*self.theta[0].nbytes
+        		file.seek(count)
+        		self.t_final = np.fromfile(file, dtype = np.float32)	
 	
 	def plot_energy(self,line_colour):
 		#plt.figure()
@@ -37,6 +40,13 @@ class particles:
 		plt.xlabel("Pitch Angle")
 		plt.ylabel("count")
 		#plt.show()
+	
+	def plot_tf(self,line_colour):
+		#plt.figure()
+		plt.hist(self.t_final,bins = 100,histtype = 'step', color = line_colour)
+		plt.xlabel("Duration")
+		plt.ylabel("count")
+		#plt.show()
 
 class trajectories:
 
@@ -46,10 +56,11 @@ class trajectories:
         		count = 3*head[0].nbytes
         		file.seek(count)
 			data = np.fromfile(file, dtype = np.float32)
-			mat = data.reshape(len(data)/(head[0]*head[1]),head[0],head[1])
+			mat = data.reshape(len(data)/(head[0]*head[1]*head[2]),head[0],head[1],head[2])
 			self.traj = mat[:,:,0]
 			self.theta = mat[:,:,1]
 			self.energies = mat[:,:,2]
+			self.t_final = mat[:,:,3]
 
 	def plot_energy(self,pn,line_colour):
 		plt.plot(self.energies[:,pn]/1e3,color = line_colour)
