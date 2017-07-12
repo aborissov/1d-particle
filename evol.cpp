@@ -34,7 +34,10 @@ void move_particles(float *particles, int timestep){
 		else {
 			J = 0;
 			E = 0;
-			particles[nfields*j+3] = timestep*dt*Tscl;
+			if (particles[nfields*j+3] == 0){
+				particles[nfields*j+3] = timestep*dt*Tscl;
+				//cout << "particle " << j << " " << timestep*dt*Tscl << endl;
+			}
 		}
 		if (particles[nfields*j+3] == 0){
                 //unsigned seed = chrono::system_clock::now().time_since_epoch().count();

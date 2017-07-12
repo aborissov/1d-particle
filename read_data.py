@@ -20,11 +20,15 @@ class particles:
         		file.seek(count)
         		self.t_final = np.fromfile(file, dtype = np.float32)	
 	
-	def plot_energy(self,line_colour):
+	def plot_energy(self,line_colour,name):
 		#plt.figure()
-		plt.hist(self.energies/1e3,bins = 100,histtype = 'step', color = line_colour)
-		plt.xlabel("Energy (keV)")
-		plt.ylabel("count")
+		fig = plt.figure()
+		ax = fig.add_axes([0.1,0.1,0.8,0.8])
+		ax.hist(self.energies/1e3,bins = 100,histtype = 'step', color = line_colour)
+		ax.label(name)
+		ax.set_xlabel("Energy (keV)")
+		ax.set_ylabel("count")
+		return fig
 		#plt.show()
 
 	def plot_position(self,line_colour):
