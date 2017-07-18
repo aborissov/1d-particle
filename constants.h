@@ -11,7 +11,7 @@ const float Vscl = Lscl/Tscl;
 const float Escl = Vscl*Bscl;
 const float etascl = Vscl*Lscl*mu0_si;
 
-const float Tfinal = 0.1/Tscl;
+const float Tfinal = 10.0/Tscl;
 const float dt = 1.0e-7/Tscl;
 const int nt = Tfinal/dt;
 const int nfields = 4;

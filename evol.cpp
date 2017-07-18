@@ -21,7 +21,7 @@ void move_particles(float *particles, int timestep){
 	Temp = 1.0e7;
 	eta_spitzer = 2.4e3/(pow(Temp,1.5))/etascl;
 	J = 10.0;	// NON-DIMENSIONAL!!!
-	eta = 1.0e-5;	// NON-DIMENSIONAL!!!
+	eta = 1.0e-2;	// NON-DIMENSIONAL!!!
         E = eta*J;	// NON-DIMENSIONAL!!!
 
 
@@ -36,7 +36,7 @@ void move_particles(float *particles, int timestep){
 			E = 0;
 			if (particles[nfields*j+3] == 0){
 				particles[nfields*j+3] = timestep*dt*Tscl;
-				//cout << "particle " << j << " " << timestep*dt*Tscl << endl;
+				cout << "particle " << j << " " << timestep*dt*Tscl << endl;
 			}
 		}
 		if (particles[nfields*j+3] == 0){
