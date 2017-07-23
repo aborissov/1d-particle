@@ -17,8 +17,8 @@ int main(int argc, char *argv[]){
 
 	initialise(particles);
 	for (int j = 0; j < nt; j++){
-		//if (j%1 == 0) write_particle(particles,newflag_trajectories);
-		//newflag_trajectories = 0;
+		if (j%1 == 0) write_particle(particles,newflag_trajectories);
+		newflag_trajectories = 0;
 		move_particles(particles,j);
 		if (isnan(particles[0])){
 			cout << "position is nan. stopping" << endl;

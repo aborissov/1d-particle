@@ -11,13 +11,13 @@ const float Vscl = Lscl/Tscl;
 const float Escl = Vscl*Bscl;
 const float etascl = Vscl*Lscl*mu0_si;
 
-const float Tfinal = 10.0/Tscl;
+const float Tfinal = 0.0001/Tscl;
 const float dt = 1.0e-7/Tscl;
 const int nt = Tfinal/dt;
 const int nfields = 4;
-const int nparticles = 10000;
+const int nparticles = 1;
 const int nwrite = 500;
-const int nwrite_particles = 10;
+const int nwrite_particles = 1;
 const int output_fields = nfields;
 
 #endif

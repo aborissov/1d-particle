@@ -15,14 +15,15 @@ float calc_vel(float gamma, float beta){
 }
 
 void move_particles(float *particles, int timestep){
-        float q,E,m,J,eta,eta_spitzer,Temp,nu,kappa,lambda_ei = 2.0e8/Lscl,Epar_extent = 2.0e4;
+        float q,E,m,J,eta,eta_spitzer,Temp,nu,kappa,lambda_ei = 2.0e8/Lscl,Epar_extent = 1.0e3;
         q = -1.6e-19;
         m = 9.11e-31;
-	Temp = 1.0e7;
-	eta_spitzer = 2.4e3/(pow(Temp,1.5))/etascl;
-	J = 10.0;	// NON-DIMENSIONAL!!!
-	eta = 1.0e-2;	// NON-DIMENSIONAL!!!
-        E = eta*J;	// NON-DIMENSIONAL!!!
+		Temp = 1.0e7;
+		eta_spitzer = 2.4e3/(pow(Temp,1.5))/etascl;
+		J = 10.0;		// NON-DIMENSIONAL!!!
+		eta = 1.0e-2;	// NON-DIMENSIONAL!!!
+    	E = eta*J;		// NON-DIMENSIONAL!!!
+		//cout << "Electric field: " << E*Escl << endl;
 
 
         unsigned seed = chrono::system_clock::now().time_since_epoch().count();
@@ -30,13 +31,14 @@ void move_particles(float *particles, int timestep){
         for(int j = 0; j < nparticles; j++){
 		if (abs(particles[nfields*j]*Lscl) < Epar_extent){
 			kappa = eta_spitzer/eta;
+			//kappa = 1.0e-5;
 		}
 		else {
 			J = 0;
 			E = 0;
 			if (particles[nfields*j+3] == 0){
 				particles[nfields*j+3] = timestep*dt*Tscl;
-				cout << "particle " << j << " " << timestep*dt*Tscl << endl;
+				//cout << "particle " << j << " " << timestep*dt*Tscl << endl;
 			}
 		}
 		if (particles[nfields*j+3] == 0){
@@ -47,9 +49,11 @@ void move_particles(float *particles, int timestep){
 
                 float beta = particles[nfields*j+1];
                 float v = calc_vel(particles[nfields*j+2], particles[nfields*j+1]);
+
 				if (abs(particles[nfields*j]*Lscl) < Epar_extent) nu = v/(lambda_ei*kappa);
-				//if (-1 > 0) nu = v/(lambda_ei*kappa);
 				else nu = 0.0e6;
+				//nu = 0.0;
+
                 float u = v*particles[nfields*j+2]*beta;
                 float uperp = v*particles[nfields*j+2]*sqrt(1.0-beta*beta);
                 float dudt = q*E*Escl/m*Tscl/Vscl;

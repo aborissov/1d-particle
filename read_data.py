@@ -46,7 +46,7 @@ class trajectories:
 
 	def __init__(self,path):
 		with open (path, 'r') as file:
-			head = np.fromfile(file, dtype = np.int32, count = 2)
+			head = np.fromfile(file, dtype = np.int32, count = 3)
         		count = 3*head[0].nbytes
         		file.seek(count)
 			data = np.fromfile(file, dtype = np.float32)

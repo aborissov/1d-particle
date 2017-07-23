@@ -44,7 +44,7 @@ void write_particle(float *particles, bool newflag){
 		outFile.open("trajectories.dat", ofstream::binary);
 		outFile.write((char *) &(nparticles), sizeof(int));
 		outFile.write((char *) &(output_fields), sizeof(int));
-		outFile.write((char *) &(nwrite), sizeof(int));
+		outFile.write((char *) &(nwrite_particles), sizeof(int));
 	}
 	else outFile.open("trajectories.dat", ofstream::binary | ofstream::app);
 	for (int j = 0; j < nwrite_particles; j++){
