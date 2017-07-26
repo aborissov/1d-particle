@@ -5,11 +5,11 @@
 
 using namespace std;
 
-void write_particles(float *particles, bool newflag, char *filepath){
+void write_particles(double *particles, bool newflag, char *filepath){
         ofstream outFile;
-        float v;
+        double v;
         v = calc_vel(particles[2], particles[1]);
-        float pos,theta,energy,t_final;
+        double pos,theta,energy,t_final;
 
         if (newflag) outFile.open(filepath, ofstream::binary);
         else outFile.open(filepath, ofstream::binary | ofstream::app);
@@ -17,28 +17,28 @@ void write_particles(float *particles, bool newflag, char *filepath){
 	outFile.write((char*) &(output_fields), sizeof(int));
 	for (int j = 0; j < nparticles; j++){
 		pos = particles[nfields*j]*Lscl;
-        	outFile.write((char*) &(pos), sizeof(float));
+        	outFile.write((char*) &(pos), sizeof(double));
 	}
 	for (int j = 0; j < nparticles; j++){
 		energy = (particles[nfields*j+2]-1)*5.11e5;
-        	outFile.write((char*) &(energy), sizeof(float));
+        	outFile.write((char*) &(energy), sizeof(double));
 		//cout << "energy = " << energy << endl;
 	}
 	for (int j = 0; j < nparticles; j++){
 		theta = particles[nfields*j+1];
-        	outFile.write((char*) &(theta), sizeof(float));
+        	outFile.write((char*) &(theta), sizeof(double));
 	}
 	for (int j = 0; j < nparticles; j++){
 		t_final = particles[nfields*j+3]*Tscl;
-        	outFile.write((char*) &(t_final), sizeof(float));
+        	outFile.write((char*) &(t_final), sizeof(double));
 	}
         outFile.close();
 }
 
-void write_particle(float *particles, bool newflag){
+void write_particle(double *particles, bool newflag){
 	ofstream outFile;
-	float v = calc_vel(particles[2], particles[1]);
-	float pos,theta,energy,t_final;
+	double v = calc_vel(particles[2], particles[1]);
+	double pos,theta,energy,t_final;
 
 	if (newflag){
 		outFile.open("trajectories.dat", ofstream::binary);
@@ -52,10 +52,10 @@ void write_particle(float *particles, bool newflag){
 		theta = particles[nfields*j+1];
 		energy = (particles[nfields*j+2] - 1)*5.11e5;
 		t_final = particles[nfields*j+3]*Tscl;
-		outFile.write((char *) &pos, sizeof(float));
-		outFile.write((char *) &theta, sizeof(float));
-		outFile.write((char *) &energy, sizeof(float));
-		outFile.write((char *) &t_final, sizeof(float));
+		outFile.write((char *) &pos, sizeof(double));
+		outFile.write((char *) &theta, sizeof(double));
+		outFile.write((char *) &energy, sizeof(double));
+		outFile.write((char *) &t_final, sizeof(double));
 	}
 
 }

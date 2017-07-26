@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void initialise(float *particles){
+void initialise(double *particles){
         for(int j = 0; j < nparticles*nfields; j++){
                 if (j%nfields == 0) particles[j] = 0;
                 else if (j%nfields == 1) particles[j] = 0.1;
