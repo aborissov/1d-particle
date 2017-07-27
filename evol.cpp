@@ -15,22 +15,29 @@ double calc_vel(double gamma, double beta){
 }
 
 void move_particles(double *particles, int timestep, double *dw){
-        double q,E,m,J,eta,eta_spitzer,Temp,nu,kappa,lambda_ei = 2.0e8/Lscl,Epar_extent = 1.0e3;
-	int random_index = 0;
+        double E,J,eta,eta_spitzer,nu,kappa,lambda_ei = 2.0e8/Lscl,Epar_extent = 1.0e3;
+	double beta,v,u,uperp,gamma,dudt,betadot,gammadot,dbeta,dgamma,position;
+	int random_index;
+	random_index = 0;
+	//random_index = timestep;
 
-        q = -1.6e-19;
-        m = 9.11e-31;
-		Temp = 1.0e7;
-		eta_spitzer = 2.4e3/(pow(Temp,1.5))/etascl;
-		J = 10.0;		// NON-DIMENSIONAL!!!
-		eta = 1.0e-2;		// NON-DIMENSIONAL!!!
-    		E = eta*J;		// NON-DIMENSIONAL!!!
-		//cout << "Electric field: " << E*Escl << endl;
+	eta_spitzer = 2.4e3/(pow(Temp,1.5))/etascl;
+	J = 1.0e4/Escl;		// NON-DIMENSIONAL!!! Note: ensures electric field of 10 V/m when eta = 10^-3 (non-dimensional)
+	eta = 1.0e-3;		// NON-DIMENSIONAL!!!
+    	E = eta*J;		// NON-DIMENSIONAL!!!
+	//cout << "Electric field: " << E*Escl << endl;
 
 
-        //unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-        //default_random_engine generator (seed);
         for(int j = 0; j < nparticles; j++){
+		position = particles[nfields*j];
+		beta = particles[nfields*j+1];
+		gamma = particles[nfields*j+2];
+                v = calc_vel(gamma,beta);
+                u = v*gamma*beta;
+                uperp = v*gamma*sqrt(1.0-beta*beta);
+
+		//printf("particle %d dw %f random_index %d\n",j,dw[random_index],random_index);
+
 		if (abs(particles[nfields*j]*Lscl) < Epar_extent){
 			//kappa = eta_spitzer/eta;
 			kappa = 1.0e-5;
@@ -44,49 +51,45 @@ void move_particles(double *particles, int timestep, double *dw){
 			}
 		}
 		if (particles[nfields*j+3] == 0){
-                //unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-                //default_random_engine generator (seed*(j+1));
-                //normal_distribution<double> distribution(0.0,1.0);
-                //double dw = distribution(generator)*sqrt(dt);
+			if (abs(particles[nfields*j]*Lscl) < Epar_extent) nu = v/(lambda_ei*kappa);
+			else nu = 0.0e6;
+			//nu = 0.0;
 
-                double beta = particles[nfields*j+1];
-                double v = calc_vel(particles[nfields*j+2], particles[nfields*j+1]);
+                	dudt = q*E*Escl/m*Tscl/Vscl;
+                	gammadot = u*Vscl/(c*c)*dudt*Vscl/(sqrt(1 + u*u*Vscl*Vscl/(c*c) + uperp*uperp*Vscl*Vscl/(c*c)));      // work in progress!!!
+                	if (u == 0) betadot = 0;
+                	else betadot = dudt/u*beta*(1.0-beta*beta);
 
-				if (abs(particles[nfields*j]*Lscl) < Epar_extent) nu = v/(lambda_ei*kappa);
-				else nu = 0.0e6;
-				//nu = 0.0;
+                	dgamma = gammadot*dt;
+                	dbeta = (betadot - beta*nu)*dt + sqrt((1.0 - beta*beta)*nu)*dw[random_index];
+			random_index++;
 
-                double u = v*particles[nfields*j+2]*beta;
-                double uperp = v*particles[nfields*j+2]*sqrt(1.0-beta*beta);
-                double dudt = q*E*Escl/m*Tscl/Vscl;
-                double gammadot = u*Vscl/(c*c)*dudt*Vscl/(sqrt(1 + u*u*Vscl*Vscl/(c*c) + uperp*uperp*Vscl*Vscl/(c*c)));      // work in progress!!!
-                double betadot;
-                if (u == 0) betadot = 0;
-                else betadot = dudt/u*beta*(1.0-beta*beta);
+                	particles[nfields*j+1] += dbeta;
+                	if (particles[nfields*j+1] > 1.0){
+						//cout << "beta = " << particles[nfields*j+1] << endl;
+						particles[nfields*j+1] = -particles[nfields*j+1] + floor(particles[nfields*j+1]) + 1.0;
+					}
+                	else if (particles[nfields*j+1] < -1.0){
+						//cout << "beta = " << particles[nfields*j+1] << endl;
+						particles[nfields*j+1] = -particles[nfields*j+1] + ceil(particles[nfields*j+1]) - 1.0;
+					}
+                	particles[nfields*j+2] += dgamma;
+                	if (particles[nfields*j+2] < 1) particles[nfields*j+2] -= 2.0*dgamma;
 
-                double dgamma = gammadot*dt;
-                double dbeta = (betadot - beta*nu)*dt + sqrt((1.0 - beta*beta)*nu)*dw[random_index];
-		random_index++;
+                	v = calc_vel(particles[nfields*j + 2], particles[nfields*j + 1]);
+                	particles[nfields*j] += particles[nfields*j+1]*v*dt;
+			
+			energy_kev[j] = (particles[nfields*j+2]-1)*511.0;
+			potential[j] = -eta*J*Escl*particles[nfields*j]*Lscl/1.0e3;
+			
 
-                particles[nfields*j+1] += dbeta;
-                if (particles[nfields*j+1] > 1.0){
-					//cout << "beta = " << particles[nfields*j+1] << endl;
-					particles[nfields*j+1] = -particles[nfields*j+1] + floor(particles[nfields*j+1]) + 1.0;
-				}
-                else if (particles[nfields*j+1] < -1.0){
-					//cout << "beta = " << particles[nfields*j+1] << endl;
-					particles[nfields*j+1] = -particles[nfields*j+1] + ceil(particles[nfields*j+1]) - 1.0;
-				}
-                particles[nfields*j+2] += dgamma;
-                if (particles[nfields*j+2] < 1) particles[nfields*j+2] -= 2.0*dgamma;
-
-                v = calc_vel(particles[nfields*j + 2], particles[nfields*j + 1]);
-                particles[nfields*j] += particles[nfields*j+1]*v*dt;
-		
-		//energy_kev[j] = (particles[nfields*j+2]-1)*511.0;
-		//potential[j] = -10.0*particles[nfields*j]*Lscl/1.0e3;
-		//cout << "particle " << j << " total energy " << energy_kev[j] - potential[j] - energy_kev_0  
-		//	<< " kinetic, potential, initial " << energy_kev[j] << " " << potential[j] << " "  << energy_kev_0 << endl;
+			if (fabs(energy_kev[j] - potential[j] - energy_kev_0) > 1.0){
+				particles[nfields*j] = Epar_extent/Lscl;
+				printf("particle %d deviated from energy conservation at time %f", j, timestep*dt*Tscl);
+				printf(" kinetic %f, potential %f, initial %f, difference %f\n", energy_kev[j], potential[j], energy_kev_0,energy_kev[j] - potential[j] - energy_kev_0);
+			}
+			//cout << "particle " << j << " total energy " << energy_kev[j] - potential[j] - energy_kev_0  
+			//	<< " kinetic, potential, initial " << energy_kev[j] << " " << potential[j] << " "  << energy_kev_0 << endl;
 		}
         }
 }

@@ -9,6 +9,10 @@
 
 const double c = 3.0e8;
 const double mu0_si = 8.85e-12;
+const double q = -1.6e-19;
+const double m = 9.11e-31;
+const double Temp = 1.0e7;
+
 
 const double Bscl = 0.01;
 const double Lscl = 1.0e6;
@@ -21,9 +25,9 @@ const double Tfinal = 0.1/Tscl;
 const double dt = 1.0e-8/Tscl;
 const int nt = Tfinal/dt;
 const int nfields = 4;
-const int nparticles = 5;
+const int nparticles = 10;
 const int nwrite = 500;
-const int nwrite_particles = 1;
+const int nwrite_particles = 10;
 const int output_fields = nfields;
 
 EXTERN double *energy_kev, *potential;

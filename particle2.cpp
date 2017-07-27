@@ -14,18 +14,19 @@ using namespace std;
 int main(int argc, char *argv[]){
 	double particles[nparticles*nfields]; // array of particles: 1d position, cosine of pitch angle, lorentz factor, exit time
 	bool newflag = 1,newflag_trajectories = 1;
-	double maxp = 0,minp = 0,meanp = 0;
 	double *dw;
 
 	energy_kev = (double *)malloc(nparticles*sizeof(double));
 	potential = (double *)malloc(nparticles*sizeof(double));
-	dw = (double *)malloc(nparticles*nt*sizeof(double));
+	dw = (double *)malloc(nparticles*sizeof(double));
+	//dw = (double *)malloc(nt*sizeof(double));
 	initialise(particles);
 
 	// initialise random number generator
 	unsigned seed = chrono::system_clock::now().time_since_epoch().count();
 	default_random_engine generator (seed);
 	normal_distribution<double> distribution(0.0,1.0);
+	//for (int j = 0; j < nt; j++) dw[j] = distribution(generator)*sqrt(dt);
 
 	// main time loop
 	for (int j = 0; j < nt; j++){
