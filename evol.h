@@ -1,7 +1,7 @@
 #ifndef EVOL_H
 #define EVOL_H
 
-double calc_vel(double, double);
-void move_particles(double *, int, double *);
+real calc_vel(real, real);
+void move_particles(real *, int, real *);
 
 #endif

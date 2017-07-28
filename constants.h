@@ -7,30 +7,32 @@
 	#define EXTERN extern
 #endif
 
-const double c = 3.0e8;
-const double mu0_si = 8.85e-12;
-const double q = -1.6e-19;
-const double m = 9.11e-31;
-const double Temp = 1.0e7;
+typedef double real;
+
+const real c = 3.0e8;
+const real mu0_si = 8.85e-12;
+const real q = -1.6e-19;
+const real m = 9.11e-31;
+const real Temp = 1.0e7;
 
 
-const double Bscl = 0.01;
-const double Lscl = 1.0e6;
-const double Tscl = 1.0e2;
-const double Vscl = Lscl/Tscl;
-const double Escl = Vscl*Bscl;
-const double etascl = Vscl*Lscl*mu0_si;
+const real Bscl = 0.01;
+const real Lscl = 1.0e6;
+const real Tscl = 1.0e-6;
+const real Vscl = Lscl/Tscl;
+const real Escl = Vscl*Bscl;
+const real etascl = Vscl*Lscl*mu0_si;
 
-const double Tfinal = 0.1/Tscl;
-const double dt = 1.0e-8/Tscl;
+const real Tfinal = 0.1/Tscl;
+const real dt = 1.0e-8/Tscl;
 const int nt = Tfinal/dt;
 const int nfields = 4;
-const int nparticles = 10;
+const int nparticles = 2;
 const int nwrite = 500;
-const int nwrite_particles = 10;
+const int nwrite_particles = 2;
 const int output_fields = nfields;
 
-EXTERN double *energy_kev, *potential;
-const double energy_kev_0 = 0.5*511.0;
+EXTERN real *energy_kev, *potential;
+const real energy_kev_0 = 0.5*511.0;
 
 #endif

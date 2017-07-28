@@ -16,7 +16,7 @@
 #p100 = particles("./Data/100.dat")
 #p101 = particles("./Data/101.dat")
 
-ns = [p3]
+ns = [p4]
 fig = plt.figure()
 ax = fig.add_axes([0.1,0.1,0.8,0.8])
 rcol = 0
@@ -33,9 +33,9 @@ for i in range(len(ns)):
 	elif i == 2:
 		col = "green"
 		name = "run 3"
-        hs = ns[i].hist_energy(col,name)
+        hs = ns[i].hist_tf(col,name)
         handles.append(hs)
-ax.set_xlabel("Position (m)")
+ax.set_xlabel("duration (s)")
 ax.set_ylabel("count")
 all_handles, all_labels = ax.get_legend_handles_labels()
 ax.legend(all_handles,all_labels)
