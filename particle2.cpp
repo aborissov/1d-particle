@@ -44,10 +44,10 @@ int main(int argc, char *argv[]){
 		//dw[0] = dw[1];
 
 		move_particles(particles,j,dw);
-		if (isnan(particles[0])){
-			cout << "position is nan. stopping" << endl;
-			return 0;
-		}
+		//if (isnan((double) particles[0])){
+		//	cout << "position is nan. stopping" << endl;
+		//	return 0;
+		//}
 		//if (j % (nt/100) == 0) printf("timestep %d of %d\n",j,nt);
 	}
 

@@ -16,7 +16,7 @@
 #p100 = particles("./Data/100.dat")
 #p101 = particles("./Data/101.dat")
 
-ns = [p4]
+ns = [p1]
 fig = plt.figure()
 ax = fig.add_axes([0.1,0.1,0.8,0.8])
 rcol = 0

@@ -56,9 +56,9 @@ void move_particles(real *particles, int timestep, real *dw){
 			eta = 1.0e-3;		// NON-DIMENSIONAL!!!
     			E = eta*J;		// NON-DIMENSIONAL!!!
 
-			//if (abs(position*Lscl) < Epar_extent) nu = v/(lambda_ei*kappa);
-			//else nu = 0.0;
-			nu = 0.0;
+			if (abs(position*Lscl) < Epar_extent) nu = v/(lambda_ei*kappa);
+			else nu = 0.0;
+			//nu = 0.0;
 
                 	dudt = q*E*Escl/m*Tscl/Vscl;
                 	gammadot = u*Vscl/(c*c)*dudt*Vscl/(sqrt(1 + u*u*Vscl*Vscl/(c*c) + uperp*uperp*Vscl*Vscl/(c*c)));      // work in progress!!!
