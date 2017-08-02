@@ -9,16 +9,16 @@ class particles:
 			head = np.fromfile(file, dtype = np.int32, count = 2)
         		count = 2*head[0].nbytes
         		file.seek(count)
-        		self.positions = np.fromfile(file, dtype = np.float64, count = head[0])
+        		self.positions = np.fromfile(file, dtype = np.float32, count = head[0])
         		count += head[0]*self.positions[0].nbytes
         		file.seek(count)
-        		self.energies = np.fromfile(file, dtype = np.float64, count = head[0])
+        		self.energies = np.fromfile(file, dtype = np.float32, count = head[0])
         		count += head[0]*self.energies[0].nbytes
         		file.seek(count)
-        		self.theta = np.fromfile(file, dtype = np.float64, count = head[0])	
+        		self.theta = np.fromfile(file, dtype = np.float32, count = head[0])	
         		count += head[0]*self.theta[0].nbytes
         		file.seek(count)
-        		self.t_final = np.fromfile(file, dtype = np.float64)	
+        		self.t_final = np.fromfile(file, dtype = np.float32)	
 	
 	def hist_energy(self,line_colour,name):
 		hist,hbins = np.histogram(self.energies/1e3,bins = 100)
@@ -49,7 +49,7 @@ class trajectories:
 			head = np.fromfile(file, dtype = np.int32, count = 3)
         		count = 3*head[0].nbytes
         		file.seek(count)
-			data = np.fromfile(file, dtype = np.float64)
+			data = np.fromfile(file, dtype = np.float32)
 			mat = data.reshape(len(data)/(head[0]*head[1]*head[2]),head[0],head[1],head[2])
 			self.traj = mat[:,:,0]
 			self.theta = mat[:,:,1]

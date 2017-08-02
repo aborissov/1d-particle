@@ -16,25 +16,20 @@ real calc_vel(real gamma, real beta){
 
 void move_particles(real *particles, int timestep, real *dw){
         real E,J,eta,eta_spitzer,nu,kappa,lambda_ei = 2.0e8/Lscl,Epar_extent = 1.0e3;
-	real beta,v,u,uperp,gamma,dudt,betadot,gammadot,dbeta,dgamma,position;
-	int random_index;
-	random_index = 0;
-	//random_index = timestep;
+		real beta,v,u,uperp,gamma,dudt,betadot,gammadot,dbeta,dgamma,position;
+		int random_index;
+		random_index = 0;
+		//random_index = timestep;
 
-	//eta_spitzer = 2.4e3/(pow(Temp,1.5))/etascl;
-	//J = 1.0e4/Escl;		// NON-DIMENSIONAL!!! Note: ensures electric field of 10 V/m when eta = 10^-3 (non-dimensional)
-	//eta = 1.0e-3;		// NON-DIMENSIONAL!!!
-    	//E = eta*J;		// NON-DIMENSIONAL!!!
-	//cout << "Electric field: " << E*Escl << endl;
 
 
         for(int j = 0; j < nparticles; j++){
 		position = particles[nfields*j];
 		beta = particles[nfields*j+1];
 		gamma = particles[nfields*j+2];
-                v = calc_vel(gamma,beta);
-                u = v*gamma*beta;
-                uperp = v*gamma*sqrt(1.0-beta*beta);
+        v = calc_vel(gamma,beta);
+        u = v*gamma*beta;
+        uperp = v*gamma*sqrt(1.0-beta*beta);
 
 		//printf("particle %d dw %f random_index %d\n",j,dw[random_index],random_index);
 
@@ -46,7 +41,7 @@ void move_particles(real *particles, int timestep, real *dw){
 			J = 0;
 			E = 0;
 			if (particles[nfields*j+3] == 0){
-				particles[nfields*j+3] = timestep*dt*Tscl;
+				particles[nfields*j+3] = timestep*dt;
 				//cout << "particle " << j << " " << timestep*dt*Tscl << endl;
 			}
 		}
@@ -54,35 +49,35 @@ void move_particles(real *particles, int timestep, real *dw){
 			eta_spitzer = 2.4e3/(pow(Temp,1.5))/etascl;
 			J = 1.0e4/Escl;		// NON-DIMENSIONAL!!! Note: ensures electric field of 10 V/m when eta = 10^-3 (non-dimensional)
 			eta = 1.0e-3;		// NON-DIMENSIONAL!!!
-    			E = eta*J;		// NON-DIMENSIONAL!!!
+    		E = eta*J;		// NON-DIMENSIONAL!!!
 
 			if (abs(position*Lscl) < Epar_extent) nu = v/(lambda_ei*kappa);
 			else nu = 0.0;
 			//nu = 0.0;
 
-                	dudt = q*E*Escl/m*Tscl/Vscl;
-                	gammadot = u*Vscl/(c*c)*dudt*Vscl/(sqrt(1 + u*u*Vscl*Vscl/(c*c) + uperp*uperp*Vscl*Vscl/(c*c)));      // work in progress!!!
-                	if (u == 0) betadot = 0;
-                	else betadot = dudt/u*beta*(1.0-beta*beta);
+            dudt = q*E*Escl/m*Tscl/Vscl;
+            gammadot = u*Vscl/(c*c)*dudt*Vscl/(sqrt(1 + u*u*Vscl*Vscl/(c*c) + uperp*uperp*Vscl*Vscl/(c*c)));      // work in progress!!!
+            if (u == 0) betadot = 0;
+            else betadot = dudt/u*beta*(1.0-beta*beta);
 
-                	dgamma = gammadot*dt;
-                	dbeta = (betadot - beta*nu)*dt + sqrt((1.0 - beta*beta)*nu)*dw[random_index];
+            dgamma = gammadot*dt;
+            dbeta = (betadot - beta*nu)*dt + sqrt((1.0 - beta*beta)*nu)*dw[random_index];
 			random_index++;
 
-                	beta += dbeta;
-                	if (beta > 1.0){
-						//cout << "beta = " << particles[nfields*j+1] << endl;
-						beta = -beta + floor(beta) + 1.0;
-					}
-                	else if (beta < -1.0){
-						//cout << "beta = " << particles[nfields*j+1] << endl;
-						beta = -beta + ceil(beta) - 1.0;
-					}
-                	gamma += dgamma;
-                	if (gamma < 1) gamma -= 2.0*dgamma;
+            beta += dbeta;
+            if (beta > 1.0){
+				//cout << "beta = " << particles[nfields*j+1] << endl;
+				beta = -beta + floor(beta) + 1.0;
+			}
+            else if (beta < -1.0){
+				//cout << "beta = " << particles[nfields*j+1] << endl;
+				beta = -beta + ceil(beta) - 1.0;
+			}
+            gamma += dgamma;
+            if (gamma < 1) gamma -= 2.0*dgamma;
 
-                	v = calc_vel(gamma, beta);
-                	position += beta*v*dt;
+            v = calc_vel(gamma, beta);
+            position += beta*v*dt;
 			
 			energy_kev[j] = (gamma-1.0)*511.0;
 			potential[j] = -eta*J*Escl*position*Lscl/1.0e3;
