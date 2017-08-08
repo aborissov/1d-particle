@@ -33,22 +33,15 @@ int main(int argc, char *argv[]){
 	//for (int j = 0; j < nt; j++) dw[j] = distribution(generator)*sqrt(dt);
 
 	// main time loop
-	for (int j = 0; j < nt; j++){
-		//if (j%1 == 0) write_particle(particles,newflag_trajectories);
-		//newflag_trajectories = 0;
+	int tstep;
+	for (tstep = 0; tstep < nt; tstep++){
+		//if (tstep%1 == 0) write_particle(particles,newflag_tratstepectories);
+		//newflag_tratstepectories = 0;
 
 		// generate random numbers
-		for (int j = 0; j < nparticles; j++) dw[j] = distribution(generator)*sqrt(dt);
-		//dw[1] = distribution(generator1)*sqrt(dt);
-		//dw[0] = distribution(generator2)*sqrt(dt);
-		//dw[0] = dw[1];
+		for (int tstep = 0; tstep < nparticles; tstep++) dw[tstep] = distribution(generator)*sqrt(dt);
 
-		move_particles(particles,j,dw);
-		//if (isnan((double) particles[0])){
-		//	cout << "position is nan. stopping" << endl;
-		//	return 0;
-		//}
-		//if (j % (nt/100) == 0) printf("timestep %d of %d\n",j,nt);
+		move_particles(particles,tstep,dw);
 	}
 
 	free(energy_kev);

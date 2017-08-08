@@ -1,8 +1,10 @@
 OBJS = diagnostics.o initial_conditions.o evol.o particle2.o
 CC = g++
 DEBUG = -g
-CFLAGS = -O3 -std=gnu++11  -c $(DEBUG)
-LFLAGS = -O3 -std=gnu++11  $(DEBUG)
+CFLAGS = -O3 -std=gnu++11  -c -fopenmp $(DEBUG)
+LFLAGS = -O3 -std=gnu++11  -fopenmp $(DEBUG)
+#CFLAGS = -O3 -std=gnu++11  -c  $(DEBUG)
+#LFLAGS = -O3 -std=gnu++11   $(DEBUG)
 
 p1 : $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS) -o p1
